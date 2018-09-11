@@ -32,7 +32,7 @@ function automaticGmailUpdates() {
     if (currLabel_parts[0] == "auto") {
 //            Second level label after autodelete is number of days to retain email 
       var action = currLabel_parts[1];
-      if (action = "archive" || action = "delete") {
+      if (action == "archive" || action == "delete") {
         delayDays = +currLabel_parts[2];
         if (delayDays > 0 && delayDays < 2000) {
           _automaticGmailUpdates(currLabel, delayDays, action);
