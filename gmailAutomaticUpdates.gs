@@ -35,7 +35,7 @@ function automaticGmailUpdates() {
       if (action = "archive" || action = "delete") {
         delayDays = +currLabel_parts[2];
         if (delayDays > 0 && delayDays < 2000) {
-          _gmailAutoDelete(currLabel, delayDays, action);
+          _automaticGmailUpdates(currLabel, delayDays, action);
       } 
     }
   }
