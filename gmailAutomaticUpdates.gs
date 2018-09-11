@@ -1,6 +1,8 @@
 /*
-Athor: @tedsteinmann
+Author: @tedsteinmann
 Copyright: https://gist.github.com/tedsteinmann/0ee248856de6e75498470db7c98fab09
+
+Modifications : simon57nz 
 
 Original author
 fwed (contact@fwed.fr)
@@ -14,31 +16,31 @@ https://gist.github.com/anonymous/2cca33d376f7f924fdaa67891ad098cc#gistcomment-1
 */
 
 function automaticGmailUpdates() {
-
-//setting primary inputs
-var prefix = 'auto'; //top level label could be re-named (it is case sensitive);
-var actions = ['delete','archive']; //conditional -- DO NOT CHANGE
-var interval = [ // could change intervals and days (un-tested)
-  { name: 'daily', days: 1,},
-  { name: 'weekly',days: 7,},
-  { name: 'monthly',days: 30,},
-];
-
-//e.g. Gmail label structure: auto/delete/daily OR auto/archive/weekly
-
-actions.forEach(setInterval);
-
-  function setInterval(value) {
-
-    var action = value; //for clarity
-
-  	for (i=0; i < interval.length ; i++) { //looping over intervals
-      var label = prefix +'/'+ value +'/'+ interval[i].name;
-        _automaticGmailUpdates(label, interval[i].days, action);
-  	}
+  var prefix = 'auto'; //top level label could be re-named (it is case sensitive);
+  var actions = ['delete','archive']; //conditional -- DO NOT CHANGE
+  var maxDate = new Date();
+  var delayDays = 5;
+  var currLabel_parts = ["label","0","sublabel"];
+//  var Curr_Date = new Date();
+//  var Datecheck = Curr_Date.getDate();
+// Get all the threads that are labelled 
+  var labels = GmailApp.getUserLabels();
+  for (var a = 0; a < labels.length; a++) {  
+    var currLabel = labels[a].getName();
+    currLabel_parts = currLabel.split("/");
+//              Parent label "for short life emails is "auto"
+    if (currLabel_parts[0] == "auto") {
+//            Second level label after autodelete is number of days to retain email 
+      var action = currLabel_parts[1];
+      if (action = "archive" || action = "delete") {
+        delayDays = +currLabel_parts[2];
+        if (delayDays > 0 && delayDays < 2000) {
+          _gmailAutoDelete(currLabel, delayDays, action);
+      } 
+    }
   }
 }
-
+}
 function _automaticGmailUpdates(label, days, action) {
 
   Logger.log('Running automatic ' + action +' for messages labeled %s', label);
